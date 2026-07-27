@@ -6,7 +6,7 @@
 'use strict';
 
 /* ── Theme Toggle ─────────────────────────────────── */
-const html        = document.documentElement;
+const html = document.documentElement;
 const themeToggle = document.getElementById('themeToggle');
 
 // Load saved preference (default: dark)
@@ -15,7 +15,7 @@ html.setAttribute('data-theme', savedTheme);
 
 themeToggle?.addEventListener('click', () => {
   const current = html.getAttribute('data-theme');
-  const next    = current === 'dark' ? 'light' : 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
   html.setAttribute('data-theme', next);
   localStorage.setItem('ks-theme', next);
 });
@@ -37,8 +37,8 @@ handleNavScroll(); // run on load
 
 
 /* ── Navbar: Active Link on Scroll ───────────────── */
-const sections  = document.querySelectorAll('section[id]');
-const navLinks  = document.querySelectorAll('.nav-link');
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link');
 
 const updateActiveLink = () => {
   let current = '';
@@ -61,9 +61,9 @@ window.addEventListener('scroll', updateActiveLink, { passive: true });
 
 
 /* ── Mobile Menu ──────────────────────────────────── */
-const hamburger  = document.getElementById('hamburger');
+const hamburger = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobileMenu');
-const mobLinks   = document.querySelectorAll('.mob-link');
+const mobLinks = document.querySelectorAll('.mob-link');
 
 hamburger?.addEventListener('click', () => {
   const isOpen = mobileMenu?.classList.toggle('open');
@@ -82,8 +82,8 @@ mobLinks.forEach(link => {
 // Close on outside click
 document.addEventListener('click', (e) => {
   if (mobileMenu?.classList.contains('open') &&
-      !mobileMenu.contains(e.target) &&
-      !hamburger?.contains(e.target)) {
+    !mobileMenu.contains(e.target) &&
+    !hamburger?.contains(e.target)) {
     mobileMenu.classList.remove('open');
     hamburger?.classList.remove('open');
     document.body.style.overflow = '';
@@ -95,21 +95,33 @@ document.addEventListener('click', (e) => {
 const animatedElements = document.querySelectorAll('[data-animate]');
 
 const observerOptions = {
-  threshold: 0.12,
-  rootMargin: '0px 0px -40px 0px'
+  threshold: 0.05,
+  rootMargin: '0px'
 };
 
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('in-view');
-      // Unobserve after animating in
       observer.unobserve(entry.target);
     }
   });
 }, observerOptions);
 
 animatedElements.forEach(el => observer.observe(el));
+
+// Reveal elements currently in viewport on load
+const revealVisibleOnLoad = () => {
+  animatedElements.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      el.classList.add('in-view');
+    }
+  });
+};
+
+revealVisibleOnLoad();
+window.addEventListener('load', revealVisibleOnLoad);
 
 
 /* ── Smooth scroll for all anchor links ───────────── */
@@ -125,30 +137,30 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 
 /* ── Form Submission Handler ───────────────────────── */
 const KSContactForm = document.getElementById('advisory-form');
-const KSFormStatus  = document.getElementById('form-status');
+const KSFormStatus = document.getElementById('form-status');
 
 KSContactForm?.addEventListener('submit', (e) => {
   e.preventDefault();
-  
+
   if (KSFormStatus) {
     KSFormStatus.textContent = "Submitting secure consultation request...";
     KSFormStatus.className = "form-status-message success";
     KSFormStatus.style.display = "block";
   }
-  
+
   const submitBtn = KSContactForm.querySelector('.form-submit-btn');
   if (submitBtn) submitBtn.disabled = true;
-  
+
   // Simulate email sending simulation
   setTimeout(() => {
     if (KSFormStatus) {
       KSFormStatus.textContent = "Thank you. Your consultation request has been submitted securely. We will be in touch shortly.";
       KSFormStatus.className = "form-status-message success";
     }
-    
+
     KSContactForm.reset();
     if (submitBtn) submitBtn.disabled = false;
-    
+
     setTimeout(() => {
       if (KSFormStatus) {
         KSFormStatus.style.opacity = '0';
