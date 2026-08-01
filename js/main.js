@@ -173,3 +173,15 @@ KSContactForm?.addEventListener('submit', (e) => {
     }, 6000);
   }, 1200);
 });
+
+
+/* ── 3D Flip Card Interactive Toggle ──────────────── */
+document.querySelectorAll('.service-card').forEach(card => {
+  const flipBtns = card.querySelectorAll('.flip-btn');
+  flipBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      card.classList.toggle('flipped');
+    });
+  });
+});
