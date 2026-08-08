@@ -1539,6 +1539,10 @@ button {
     --delay: 0.35s;
 }
 
+.card-5 {
+    --delay: 0.45s;
+}
+
 .service-card.in-view {
     transition-delay: var(--delay);
 }
